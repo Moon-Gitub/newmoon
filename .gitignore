@@ -1,0 +1,76 @@
+# ===============================================
+# IGNORAR ARCHIVOS SENSIBLES Y TEMPORALES
+# ===============================================
+
+# ⚠️ CRÍTICO - NO SUBIR CREDENCIALES
+.env
+.env.backup
+.env.production
+parametros.php
+
+# Conexión a base de datos (contiene credenciales)
+modelos/conexion.php
+
+# Composer
+/vendor/
+composer.lock
+
+# NPM
+/node_modules/
+package-lock.json
+npm-debug.log
+yarn.lock
+
+# Caché y temporales
+/storage/cache/*
+!/storage/cache/.gitkeep
+/logs/*
+!/logs/.gitkeep
+
+# Archivos subidos por usuarios
+/vistas/img/usuarios/*
+!/vistas/img/usuarios/.gitkeep
+!/vistas/img/usuarios/default/
+/vistas/img/productos/*
+!/vistas/img/productos/.gitkeep
+
+# Certificados y claves AFIP
+/controladores/facturacion/keys/*
+/controladores/facturacion/xml/*
+
+# Archivos de cotización
+/cotizacion
+
+# Backups
+*.sql
+*.sql.gz
+*.backup
+*.bak
+
+# IDE y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
+*.log
+
+# Build y distribución
+/dist/
+/build/
+/public/build/
+
+# Tests
+/coverage/
+.phpunit.result.cache
+
+# Archivos temporales
+*.tmp
+*.temp
+~*
+
