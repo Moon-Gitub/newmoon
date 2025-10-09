@@ -38,7 +38,7 @@ Configurar tu repositorio GitHub en cPanel para que puedas hacer deploy automát
    ✅ Clone a Repository: ACTIVADO
    
    Clone URL:
-   https://claudioLuna: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@github.com/claudioLuna/newposmoon.git
+   https://claudioLuna:Mi_token@github.com/claudioLuna/newposmoon.git
    
    Repository Path:
    /home/newmoon/public_html
