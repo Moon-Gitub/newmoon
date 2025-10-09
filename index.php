@@ -43,6 +43,10 @@ require_once "parametros.php";
 require_once "controladores/sistema_cobro.controlador.php";
 require_once "modelos/sistema_cobro.modelo.php";
 
+//MERCADOPAGO
+require_once "controladores/mercadopago.controlador.php";
+require_once "modelos/mercadopago.modelo.php";
+
 require_once "extensiones/vendor/autoload.php";
 
 $plantilla = new ControladorPlantilla();
