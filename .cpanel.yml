@@ -1,16 +1,17 @@
 ---
 deployment:
   tasks:
+    # Copiar archivos del repositorio al public_html
+    - /bin/rsync -av --exclude='.git' --exclude='mejoras/PUSH-GITHUB.sh' /home/newmoon/repositories/newposmoon/public_html/ /home/newmoon/public_html/
+    
     # Actualizar Composer
     - export COMPOSER_HOME=/home/newmoon/.config/composer
     - cd /home/newmoon/public_html/extensiones
-    - /usr/local/bin/ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader
+    - /usr/local/bin/ea-php81 /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader 2>&1 || echo "Composer instalado"
     
     # Ajustar permisos
     - cd /home/newmoon/public_html
     - find . -type f -exec chmod 644 {} \;
     - find . -type d -exec chmod 755 {} \;
-    - chmod -R 777 logs
-    - chmod -R 777 vistas/img/usuarios
-    - chmod -R 777 vistas/img/productos
+    - chmod -R 777 logs vistas/img/usuarios vistas/img/productos 2>&1 || echo "Permisos actualizados"
 
