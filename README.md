@@ -23,7 +23,56 @@ Sistema completo de gestión empresarial (ERP) y punto de venta (POS) desarrolla
 - Composer
 - Extensiones PHP: PDO, PDO_MySQL, mbstring, GD, JSON
 
-## 🔧 Instalación
+## 🐳 Instalación con Docker (RECOMENDADO)
+
+La forma más rápida y sencilla de deployar este proyecto es usando Docker y Dokploy.
+
+### ⚡ Inicio Rápido con Dokploy
+
+```bash
+# 1. En Dokploy, crear servicio MySQL
+# 2. Crear aplicación desde este repositorio (rama main)
+# 3. Configurar variables de entorno mínimas
+# 4. Deploy!
+```
+
+**📖 Guías disponibles:**
+
+- **[QUICKSTART-DOKPLOY.md](QUICKSTART-DOKPLOY.md)** - ⚡ Deploy en 10 minutos
+- **[SETUP-PASO-A-PASO.md](SETUP-PASO-A-PASO.md)** - 📋 Guía completa paso a paso
+- **[README-DOCKER.md](README-DOCKER.md)** - 🔧 Documentación técnica completa
+
+### 💻 Desarrollo Local con Docker
+
+```bash
+# 1. Copiar variables de entorno
+cp .env.example .env
+
+# 2. Editar .env con tus valores
+nano .env
+
+# 3. Iniciar con Make
+make install
+
+# O con Docker Compose
+docker-compose up -d
+```
+
+**Acceder a:**
+- 🌐 Aplicación: http://localhost:8080
+- 📊 phpMyAdmin: http://localhost:8081
+
+### 🎯 Ventajas de Docker
+
+✅ **Setup automático** - Base de datos y aplicación configuradas automáticamente
+✅ **Sin dependencias** - No necesitás instalar PHP, Apache, MySQL en tu máquina
+✅ **Portabilidad** - Funciona igual en desarrollo, staging y producción
+✅ **Aislamiento** - No interfiere con otros proyectos
+✅ **Fácil escalabilidad** - Ready para Dokploy, Railway, Render, etc.
+
+---
+
+## 🔧 Instalación Manual (Tradicional)
 
 ### 1. Clonar el repositorio
 
@@ -103,18 +152,34 @@ Ver documentación completa en: [`mejoras/README.md`](mejoras/README.md)
 
 ```
 /
-├── ajax/                  # Endpoints AJAX
-├── controladores/         # Controladores MVC
-├── modelos/              # Modelos MVC
-├── vistas/               # Vistas (HTML/PHP)
-│   ├── modulos/          # Módulos de vistas
-│   ├── js/               # JavaScript
-│   └── dist/             # Assets compilados
-├── extensiones/          # Librerías externas
-├── base_datos/           # Scripts SQL
-├── mejoras/              # Documentación de mejoras
-└── logs/                 # Archivos de log
-
+├── ajax/                      # Endpoints AJAX
+├── controladores/             # Controladores MVC
+├── modelos/                   # Modelos MVC
+├── vistas/                    # Vistas (HTML/PHP)
+│   ├── modulos/              # Módulos de vistas
+│   ├── js/                   # JavaScript
+│   └── dist/                 # Assets compilados
+├── extensiones/               # Librerías externas (Composer)
+├── base_datos/                # Scripts SQL
+├── mejoras/                   # Documentación de mejoras
+├── logs/                      # Archivos de log
+│
+├── 🐳 DOCKER/DEPLOYMENT
+├── Dockerfile                 # Imagen Docker multi-stage
+├── docker-compose.yml         # Orquestación de servicios
+├── docker-entrypoint.sh       # Script de inicialización
+├── .dockerignore              # Archivos excluidos del build
+├── .env.example               # Variables de entorno template
+├── Makefile                   # Comandos de desarrollo
+├── docker/
+│   └── mysql/
+│       └── my.cnf            # Configuración MySQL
+│
+└── 📚 DOCUMENTACIÓN
+    ├── README.md              # Este archivo
+    ├── README-DOCKER.md       # Guía completa Docker
+    ├── QUICKSTART-DOKPLOY.md  # Inicio rápido Dokploy
+    └── SETUP-PASO-A-PASO.md   # Guía paso a paso detallada
 ```
 
 ## 🔐 Seguridad
@@ -140,6 +205,22 @@ Contraseña: admin123
 
 ## 📚 Documentación
 
+### 📖 Índice y Navegación
+- **[INDICE-DOCUMENTACION.md](INDICE-DOCUMENTACION.md)** - 🗺️ Navegación completa de toda la documentación
+- **[CHANGELOG.md](CHANGELOG.md)** - 📝 Historial de cambios y versiones
+
+### 🐳 Docker y Deployment
+- **[QUICKSTART-DOKPLOY.md](QUICKSTART-DOKPLOY.md)** - ⚡ Inicio rápido en Dokploy (10 min)
+- **[SETUP-PASO-A-PASO.md](SETUP-PASO-A-PASO.md)** - 📋 Guía completa paso a paso para principiantes
+- **[README-DOCKER.md](README-DOCKER.md)** - 🔧 Documentación técnica Docker completa
+- [Makefile](Makefile) - 🛠️ Comandos útiles para desarrollo (`make help`)
+
+### 📦 Archivos de Configuración
+- [.env.example](.env.example) - Todas las variables de entorno disponibles
+- [Dockerfile](Dockerfile) - Configuración de imagen Docker
+- [docker-compose.yml](docker-compose.yml) - Orquestación de servicios
+
+### 🎨 Mejoras y Desarrollo
 - [Plan de Mejoras Completo](mejoras/README.md)
 - [Guía MercadoPago](mejoras/GUIA-MERCADOPAGO.md)
 - [Mejoras Visuales](mejoras/MEJORAS-VISUALES-COBRO.md)
@@ -166,12 +247,25 @@ Para soporte o consultas:
 
 ## 🎯 Roadmap
 
+### ✅ Completado
+- [x] **Soporte completo para Docker y Dokploy** - Deploy automático desde GitHub
+- [x] Sistema de cobros con MercadoPago
+- [x] Integración con AFIP para facturación electrónica
+- [x] Sistema de cuenta corriente de clientes y proveedores
+
+### 🚧 En Progreso
 - [ ] Migración completa a PHP 8+
+- [ ] Sistema de backups automáticos
+- [ ] Mejoras de seguridad (autenticación 2FA)
+
+### 📅 Planificado
 - [ ] Implementación de testing automatizado
 - [ ] API RESTful para integraciones
 - [ ] App móvil (React Native)
 - [ ] Dashboard analytics avanzado
-- [ ] Integración con más pasarelas de pago
+- [ ] Integración con más pasarelas de pago (Stripe, PayPal)
+- [ ] Sistema de notificaciones push
+- [ ] Multi-tenancy (SaaS)
 
 ---
 
