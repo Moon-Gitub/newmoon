@@ -74,3 +74,18 @@ Thumbs.db
 *.temp
 ~*
 
+# ===============================================
+# DOCKER
+# ===============================================
+# Archivos de entorno local
+.env
+.env.local
+.env.*.local
+
+# Datos persistentes de Docker (solo para desarrollo local)
+/docker/data/
+/docker/volumes/
+
+# Logs de contenedores
+docker-compose.override.yml
+
