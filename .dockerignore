@@ -1,0 +1,81 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+README.md
+README-DOCKER.md
+SOLUCION-ERRORES.md
+mejoras/
+
+# cPanel
+.cpanel.yml
+actualizar-composer.sh
+install-composer.php
+
+# Logs y archivos temporales
+logs/*
+*.log
+*.tmp
+*.temp
+*.cache
+
+# Archivos de configuración sensibles
+modelos/conexion.php
+.env
+.env.local
+.env.*.local
+
+# Keys y certificados
+controladores/facturacion/keys/*
+*.pem
+*.crt
+*.key
+*.p12
+
+# Archivos subidos por usuarios (se deben persistir en volúmenes)
+storage/*
+vistas/img/usuarios/*
+vistas/img/productos/*
+vistas/img/empresa/*
+
+# Node modules (si existieran)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Composer dev
+vendor/
+extensiones/vendor/
+composer.phar
+composer.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
+.Spotlight-V100
+.Trashes
+
+# Testing y CI/CD
+.github/
+.gitlab-ci.yml
+phpunit.xml
+.phpunit.result.cache
+tests/

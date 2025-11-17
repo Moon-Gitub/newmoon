@@ -1,0 +1,149 @@
+version: '3.8'
+
+services:
+  # ========================================
+  # Aplicación PHP con Apache
+  # ========================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: newmoon-app
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    environment:
+      # Base de datos
+      - DB_HOST=${DB_HOST:-mysql}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-newmoon_db}
+      - DB_USER=${DB_USER:-newmoon_user}
+      - DB_PASSWORD=${DB_PASSWORD:-newmoon_password}
+      - WAIT_FOR_DB=${WAIT_FOR_DB:-true}
+
+      # Base de datos Moon (opcional)
+      - DB_MOON_HOST=${DB_MOON_HOST:-}
+      - DB_MOON_PORT=${DB_MOON_PORT:-3306}
+      - DB_MOON_NAME=${DB_MOON_NAME:-}
+      - DB_MOON_USER=${DB_MOON_USER:-}
+      - DB_MOON_PASSWORD=${DB_MOON_PASSWORD:-}
+
+      # Aplicación
+      - APP_NAME=${APP_NAME:-NewMoon ERP/POS}
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_URL=${APP_URL:-http://localhost:8080}
+      - TZ=${TZ:-America/Argentina/Buenos_Aires}
+
+      # MercadoPago
+      - MP_PUBLIC_KEY=${MP_PUBLIC_KEY:-}
+      - MP_ACCESS_TOKEN=${MP_ACCESS_TOKEN:-}
+      - MP_MODE=${MP_MODE:-test}
+
+      # Email
+      - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_USER=${MAIL_USER:-}
+      - MAIL_PASS=${MAIL_PASS:-}
+      - MAIL_FROM=${MAIL_FROM:-noreply@moondesarrollos.com}
+
+      # AFIP
+      - AFIP_MODE=${AFIP_MODE:-testing}
+      - AFIP_CUIT=${AFIP_CUIT:-}
+    volumes:
+      # Persistir datos importantes
+      - ./logs:/var/www/html/logs
+      - ./storage:/var/www/html/storage
+      - ./vistas/img/usuarios:/var/www/html/vistas/img/usuarios
+      - ./vistas/img/productos:/var/www/html/vistas/img/productos
+      - ./vistas/img/empresa:/var/www/html/vistas/img/empresa
+      - ./controladores/facturacion/keys:/var/www/html/controladores/facturacion/keys
+
+      # Para desarrollo: mapear código en vivo
+      # Descomentar solo para desarrollo
+      # - .:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - newmoon-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ========================================
+  # Base de Datos MySQL
+  # ========================================
+  mysql:
+    image: mariadb:10.11
+    container_name: newmoon-mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-newmoon_password}
+      - MYSQL_DATABASE=${DB_NAME:-newmoon_db}
+      - MYSQL_USER=${DB_USER:-newmoon_user}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-newmoon_password}
+      - TZ=${TZ:-America/Argentina/Buenos_Aires}
+    volumes:
+      # Persistir datos de MySQL
+      - mysql-data:/var/lib/mysql
+
+      # Si tienes un dump inicial, descomenta esto:
+      # - ./base_datos/demo_db.sql:/docker-entrypoint-initdb.d/01-init.sql
+
+      # Configuración custom de MySQL
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    ports:
+      # Puerto expuesto solo para desarrollo (comentar en producción)
+      - "3306:3306"
+    networks:
+      - newmoon-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --max_connections=200
+      - --innodb_buffer_pool_size=256M
+
+  # ========================================
+  # phpMyAdmin (OPCIONAL - Solo desarrollo)
+  # ========================================
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: newmoon-phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=${DB_USER:-newmoon_user}
+      - PMA_PASSWORD=${DB_PASSWORD:-newmoon_password}
+      - UPLOAD_LIMIT=50M
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - newmoon-network
+    profiles:
+      - development
+
+# ========================================
+# Volúmenes
+# ========================================
+volumes:
+  mysql-data:
+    driver: local
+
+# ========================================
+# Redes
+# ========================================
+networks:
+  newmoon-network:
+    driver: bridge
